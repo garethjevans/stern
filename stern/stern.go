@@ -125,7 +125,7 @@ func Run(ctx context.Context, config *Config) error {
 			targetID := p.GetID()
 
 			if tail, ok := getTail(targetID); ok {
-				if tail.isActive() {
+				if tail.IsActive() {
 					continue
 				} else {
 					tail.Close()

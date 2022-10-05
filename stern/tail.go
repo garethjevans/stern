@@ -251,8 +251,8 @@ func (t *Tail) Print(msg string) {
 	fmt.Fprint(t.out, buf.String())
 }
 
-// isActive returns false if the log stream is closed.
-func (t *Tail) isActive() bool {
+// IsActive returns false if the log stream is closed.
+func (t *Tail) IsActive() bool {
 	return t.active
 }
 
