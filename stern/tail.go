@@ -45,7 +45,7 @@ type Tail struct {
 	podColor       *color.Color
 	containerColor *color.Color
 	tmpl           *template.Template
-	active         bool
+	Active         bool
 	out            io.Writer
 	errOut         io.Writer
 }
@@ -116,7 +116,7 @@ func NewTail(clientset corev1client.CoreV1Interface, nodeName, namespace, podNam
 		Options:       options,
 		closed:        make(chan struct{}),
 		tmpl:          tmpl,
-		active:        true,
+		Active:        true,
 		out:           out,
 		errOut:        errOut,
 	}
@@ -168,7 +168,7 @@ func (t *Tail) Start(ctx context.Context) error {
 	})
 
 	err := t.ConsumeRequest(ctx, req)
-	t.active = false
+	t.Active = false
 
 	if errors.Is(err, context.Canceled) {
 		return nil
@@ -253,7 +253,7 @@ func (t *Tail) Print(msg string) {
 
 // IsActive returns false if the log stream is closed.
 func (t *Tail) IsActive() bool {
-	return t.active
+	return t.Active
 }
 
 // Log is the object which will be used together with the template to generate
