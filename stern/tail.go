@@ -150,14 +150,9 @@ func (t *Tail) Start(ctx context.Context) error {
 		cancel()
 	}()
 
-	g := color.New(color.FgHiGreen, color.Bold).SprintFunc()
-	p := t.podColor.SprintFunc()
 	c := t.containerColor.SprintFunc()
-	if t.Options.Namespace {
-		fmt.Fprintf(t.errOut, "%s %s %s › %s\n", g("+"), p(t.Namespace), p(t.PodName), c(t.ContainerName))
-	} else {
-		fmt.Fprintf(t.errOut, "%s %s › %s\n", g("+"), p(t.PodName), c(t.ContainerName))
-	}
+
+	fmt.Fprintf(t.errOut, "::group::%s\n", c(t.ContainerName))
 
 	req := t.clientset.Pods(t.Namespace).GetLogs(t.PodName, &corev1.PodLogOptions{
 		Follow:       t.Options.Follow,
@@ -179,14 +174,7 @@ func (t *Tail) Start(ctx context.Context) error {
 
 // Close stops tailing
 func (t *Tail) Close() {
-	r := color.New(color.FgHiRed, color.Bold).SprintFunc()
-	p := t.podColor.SprintFunc()
-	c := t.containerColor.SprintFunc()
-	if t.Options.Namespace {
-		fmt.Fprintf(t.errOut, "%s %s %s › %s\n", r("-"), p(t.Namespace), p(t.PodName), c(t.ContainerName))
-	} else {
-		fmt.Fprintf(t.errOut, "%s %s › %s\n", r("-"), p(t.PodName), c(t.ContainerName))
-	}
+	fmt.Fprintf(t.errOut, "::endgroup::\n")
 
 	close(t.closed)
 }
